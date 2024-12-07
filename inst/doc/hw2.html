@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Zukun li" />
+
+<meta name="date" content="2024-10-04" />
+
+<title>hw2</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">hw2</h1>
+<h4 class="author">Zukun li</h4>
+<h4 class="date">2024-10-04</h4>
+
+
+
+<div id="question-5.4" class="section level2">
+<h2>Question 5.4</h2>
+<p>Write a function to compute a Monte Carlo estimate of the Beta(3,3)
+cdf,and use the function to estimate <span class="math inline">\(F(x)\)</span> for <span class="math inline">\(x=0.1,0.2,...,0.9\)</span>.Compare the estimates
+with the values returned by the <span class="math inline">\(pbeta\)</span> function in R.</p>
+</div>
+<div id="answer" class="section level2">
+<h2>Answer</h2>
+<p>As <span class="math inline">\(F(x)=\int_{-\infty}^{x}f(x)dx\)</span>
+In this question,</p>
+<p><span class="math display">\[\begin{align}
+F(x) = &amp;\int_{0}^{x}f(x;\alpha,\beta)dx\\
+=&amp; \int_{0}^{x}beta(x;3,3)dx\\
+=&amp;\int_{0}^{x}\frac{1}{B(3,3)}x^{3-1}(1-x)^{3-1}dxB\\
+\end{align}
+\]</span> We use Monte Carlo estimator: <span class="math display">\[\begin{align}
+&amp;F(x) = E_{x}(\frac{1}{x\times b(3,3)}t^{2}(1-t)^{2})dt\\
+&amp;x\sim U(0,1)\\
+&amp;Its estimate:\hat{\theta}=\frac{1}{m}\sum_{i=1}^{m}\frac{1}{x\times
+b(3,3)}t_{i}^{2}(1-t_{i})^{2}
+\end{align}
+\]</span></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>n<span class="ot">=</span><span class="dv">10000</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>Beta.cdf <span class="ot">=</span> <span class="cf">function</span>(x){</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  y<span class="ot">=</span><span class="fu">runif</span>(n)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(<span class="fu">dbeta</span>(x<span class="sc">*</span>y,<span class="dv">3</span>,<span class="dv">3</span>))<span class="sc">*</span>x)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>}</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>t<span class="ot">&lt;-</span><span class="fu">seq</span>(<span class="fl">0.1</span>,<span class="fl">0.9</span>,<span class="fl">0.1</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>x1<span class="ot">&lt;-</span><span class="fu">sapply</span>(t,<span class="cf">function</span>(t) <span class="fu">pbeta</span>(t,<span class="dv">3</span>,<span class="dv">3</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>x2<span class="ot">&lt;-</span><span class="fu">sapply</span>(t,<span class="cf">function</span>(t) <span class="fu">Beta.cdf</span>(t))</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(x1,x2),<span class="dv">4</span>)</span></code></pre></div>
+<pre><code>##      [,1]   [,2]   [,3]   [,4]   [,5]   [,6]   [,7]   [,8]   [,9]
+## x1 0.0086 0.0579 0.1631 0.3174 0.5000 0.6826 0.8369 0.9421 0.9914
+## x2 0.0086 0.0578 0.1614 0.3205 0.4963 0.6838 0.8364 0.9428 0.9845</code></pre>
+</div>
+<div id="question-5.9" class="section level2">
+<h2>Question 5.9</h2>
+<p>The Rayleigh density is <span class="math display">\[\\f(x)=\frac{x}{\sigma^{2}}e^{-x^{2}/(2\sigma^{2})},x\geq0,\sigma&gt;0\]</span>
+Implement a function to generate samples from a Rayleigh(<span class="math inline">\(\sigma\)</span>)distribution, using antithetic
+variables.What is the percent reduction in variance of <span class="math inline">\(\frac{X+X^{&#39;}}{2}\)</span>compared with <span class="math inline">\(\frac{X_{1}+X_{2}}{2}\)</span>for independent<span class="math inline">\(X_{1},X_{2}\)</span>?</p>
+</div>
+<div id="answer-1" class="section level2">
+<h2>Answer</h2>
+<p>Make <span class="math display">\[\begin{align}
+&amp;u=1-e^{-\frac{x^{2}}{2\sigma^{2}}}\\
+&amp;u^{&#39;}=1-u=e^{-\frac{x^{2}}{2\sigma^{2}}}\\
+we\ get\  &amp;u\sim U(0,1)\\
+&amp;x=\sigma\sqrt{-2ln(1-u)}\\
+and\ &amp;x^{&#39;}=\sigma\sqrt{-2ln(u)}
+\end{align}
+\]</span> So we get the function below which can generate samples from a
+Rayleigh(<span class="math inline">\(\sigma\)</span>)distribution,using
+antithetic variables:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>n<span class="ot">=</span><span class="dv">10000</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>a <span class="ot">=</span> <span class="dv">2</span><span class="co">#value of σ</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>pdf1.Rayleigh <span class="ot">=</span> <span class="cf">function</span>(x){</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  u1<span class="ot">=</span><span class="fu">runif</span>(n<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="fu">return</span>(a<span class="sc">*</span>(<span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>u1))<span class="sc">**</span><span class="fl">0.5</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>}</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>pdf2.Rayleigh <span class="ot">=</span> <span class="cf">function</span>(x){</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  u2<span class="ot">=</span><span class="fu">runif</span>(n<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="fu">return</span>(a<span class="sc">*</span>(<span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">log</span>(u2))<span class="sc">**</span><span class="fl">0.5</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>}</span></code></pre></div>
+<p><span class="math display">\[\begin{align}
+as\
+E(X)&amp;=\int_{0}^{\infty}\frac{x^{2}}{\sigma^{2}}e^{-\frac{x^{2}}{2\sigma^{2}}}dx\\
+&amp;=\sqrt{\frac{\pi}{2}}\sigma\\
+and\ Var(x)&amp;=E(X^{2})-(E(X))^{2}\\
+&amp;=\int_{0}^{\infty}\frac{x^{3}}{\sigma^{2}}e^{-\frac{x^{2}}{2\sigma^{2}}}dx-\frac{\pi}{2}\sigma^{2}\\
+&amp;=(2-\frac{\pi}{2})\sigma^{2}\\
+we\ can\ get\ \
+Var(\frac{X_{1}+X_{2}}{2})&amp;=(1-\frac{\pi}{4})\sigma^{2}\approx0.2146\sigma^{2}\\
+and \
+Var(\frac{X+X^{&#39;}}{2})&amp;=(1-\frac{\pi}{4})\sigma^{2}+\frac{Cov(X,X^{&#39;})}{2}\\
+because\ X&amp;=\sigma\sqrt{-2ln(1-u)}\\
+and\ X^{&#39;}&amp;=\sigma\sqrt{-2ln(u)}\ (u\sim U(0,1))\\
+so\ Cov(X,X^{&#39;})&amp;=E(XX^{&#39;})-E(X)E(X^{&#39;})\\
+&amp;=\int_{0}^{1}2\sigma^{2}\sqrt{ln(x)ln(1-x)}dx-\frac{\pi}{2}\sigma^{2}\\
+&amp;\approx-0.4065\sigma^{2}\\
+then\ Var(\frac{X+X^{&#39;}}{2})&amp;\approx0.0114\sigma^{2}\\
+finally,we\ find\ the\ percent\\
+reduction\ in\ varience\ is\ about:\\
+&amp;94.7\%
+\end{align}
+\]</span></p>
+</div>
+<div id="question-5.13" class="section level2">
+<h2>Question 5.13</h2>
+<p>Find two importance functions <span class="math inline">\(f_{1}\)</span>and<span class="math inline">\(f_{2}\)</span>that are supported on<span class="math inline">\((1,\infty)\)</span>and are ‘closed’ to <span class="math display">\[g(x)=\frac{x^{2}}{\sqrt{2\pi}}e^{-x^{2}/2}\   \
+x&gt;1.
+\]</span> Which of your two importance functions should produce the
+smaller variance in estimating <span class="math display">\[\int_{1}^{\infty}\frac{x^{2}}{\sqrt{2\pi}}e^{-x^{2}/2}dx
+\]</span> by importance sampling?Explain.</p>
+</div>
+<div id="answer-2" class="section level2">
+<h2>Answer</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>g <span class="ot">=</span> <span class="cf">function</span> (x) {</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  x<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">*</span>pi)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>x<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>}</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">10</span>,<span class="fl">0.1</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">g</span>(x)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="fu">plot</span>(x,y,<span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The probability distribution of the function is mainly concentrated
+in (1,4) Derive the function,we get:</p>
+<p><span class="math display">\[
+\frac{\partial g(x)}{\partial
+x}=\frac{1}{\sqrt{2\pi}}(2x-x^{3})e^{-\frac{x^{2}}{2}}=0\\
+we\ find\ when\ x=\sqrt{2}\\
+g(x)\ get\ the\ maximum\ value\sqrt{\frac{2}{\pi}}e^{-1}
+\]</span> so,we choose the importance function <span class="math inline">\(f_{1}\sim N(1.5,1)\)</span>and <span class="math inline">\(f_{2}\sim Weibull(2,2)\)</span></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>g <span class="ot">=</span> <span class="cf">function</span> (x) {</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  x<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">*</span>pi)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>x<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>}</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">10</span>,<span class="fl">0.1</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">g</span>(x)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">plot</span>(x,y,<span class="at">type=</span><span class="st">&quot;l&quot;</span>,<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>y_norm<span class="ot">&lt;-</span><span class="fu">dnorm</span>(x,<span class="at">mean =</span> <span class="fl">1.5</span>, <span class="at">sd=</span> <span class="dv">1</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>y_weibull<span class="ot">&lt;-</span><span class="fu">dweibull</span>(x,<span class="at">shape =</span> <span class="dv">2</span>,<span class="at">scale =</span> <span class="dv">2</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="fu">lines</span>(x,y_norm,<span class="at">col=</span><span class="st">&quot;red&quot;</span>,<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="fu">lines</span>(x,y_weibull,<span class="at">col=</span><span class="st">&quot;blue&quot;</span>,<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>sd_norm<span class="ot">&lt;-</span><span class="fu">sd</span>(y<span class="sc">/</span>y_norm)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>sd_weibull<span class="ot">&lt;-</span><span class="fu">sd</span>(y<span class="sc">/</span>y_weibull)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">rbind</span>(sd_norm,sd_weibull)</span></code></pre></div>
+<pre><code>##                 [,1]
+## sd_norm    0.2441490
+## sd_weibull 0.2309507</code></pre>
+<p>so ,the weibull distribution is better</p>
+</div>
+<div id="question-fast-sort" class="section level2">
+<h2>Question: Fast Sort</h2>
+<p>For <span class="math inline">\(n=10^{4},2*10^{4},4*10^{4},6*10^{4},8*10^{4}\)</span>,apply
+the fast sorting algorithm to randomly permuted numbers of
+1,…,n. Calculate computation time averaged over 100 simulations,denoted
+by<span class="math inline">\(a_{n}\)</span>. Regress <span class="math inline">\(a_{n}\ on\ t_{n}:=nlog(n)\)</span>,and graphically
+show the results(scatter plot and regression line).</p>
+</div>
+<div id="answer-3" class="section level2">
+<h2>Answer</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>n<span class="ot">=</span><span class="dv">10000</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>t<span class="ot">&lt;-</span><span class="fu">c</span>(n,<span class="dv">2</span><span class="sc">*</span>n,<span class="dv">4</span><span class="sc">*</span>n,<span class="dv">6</span><span class="sc">*</span>n,<span class="dv">8</span><span class="sc">*</span>n)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="do">##快速排序算法</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>quicksort<span class="ot">=</span><span class="cf">function</span>(x){</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">length</span>(x)<span class="sc">&lt;=</span><span class="dv">1</span>)<span class="fu">return</span>(x)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>    x0<span class="ot">&lt;-</span>x[<span class="dv">1</span>]</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    loc<span class="ot">&lt;-</span><span class="dv">1</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    low<span class="ot">&lt;-</span><span class="dv">1</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    n<span class="ot">&lt;-</span><span class="fu">length</span>(x)</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>    high<span class="ot">&lt;-</span>n</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>    <span class="cf">while</span>(low<span class="sc">!=</span>high){</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>        <span class="cf">if</span>(loc<span class="sc">==</span>low){</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>            <span class="cf">if</span>(x[high]<span class="sc">&lt;</span>x[loc]){</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>                tmp<span class="ot">&lt;-</span>x[high]</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>                x[high]<span class="ot">&lt;-</span>x[loc]</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>                x[loc]<span class="ot">&lt;-</span>tmp</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>                low<span class="ot">=</span>low<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>                loc<span class="ot">=</span>high</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>            }<span class="cf">else</span>{</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>                    high<span class="ot">=</span>high<span class="dv">-1</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>                }</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>            }<span class="cf">else</span>{</span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>                <span class="cf">if</span>(x[low]<span class="sc">&gt;</span>x[loc]){</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>                    tmp<span class="ot">&lt;-</span>x[low]</span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a>                    x[low]<span class="ot">&lt;-</span>x[loc]</span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>                    x[loc]<span class="ot">&lt;-</span>tmp</span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>                    high<span class="ot">=</span>high<span class="dv">-1</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>                    loc<span class="ot">=</span>low</span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>                }<span class="cf">else</span>{</span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>                    low<span class="ot">=</span>low<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>                }</span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a>           }</span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a>        }</span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>    L<span class="ot">=</span><span class="fu">c</span>()</span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a>    R<span class="ot">=</span><span class="fu">c</span>()</span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a>    <span class="cf">if</span>(low<span class="sc">&gt;</span><span class="dv">1</span>) L<span class="ot">=</span>x[<span class="dv">1</span><span class="sc">:</span>(low<span class="dv">-1</span>)]</span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a>    <span class="cf">if</span>(low<span class="sc">&lt;</span><span class="fu">length</span>(x)) R<span class="ot">=</span>x[(low<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>n]</span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">c</span>(<span class="fu">quicksort</span>(L),x[low],<span class="fu">quicksort</span>(R)))</span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a>}</span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a></span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a>time<span class="ot">&lt;-</span><span class="fu">numeric</span>(<span class="dv">5</span>)</span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a>k<span class="ot">&lt;-</span><span class="dv">0</span></span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> t){</span>
+<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a>  k<span class="ot">&lt;-</span>k<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a>  random_sample<span class="ot">=</span><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n,i,<span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a>  x<span class="ot">&lt;-</span><span class="fu">numeric</span>(<span class="dv">100</span>)</span>
+<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a>    start<span class="ot">&lt;-</span><span class="fu">Sys.time</span>()</span>
+<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a>    y<span class="ot">&lt;-</span><span class="fu">quicksort</span>(random_sample)</span>
+<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a>    end<span class="ot">&lt;-</span><span class="fu">Sys.time</span>()</span>
+<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a>    x[j]<span class="ot">&lt;-</span>(end<span class="sc">-</span>start)</span>
+<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a>  }</span>
+<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a>  time[k]<span class="ot">&lt;-</span><span class="fu">mean</span>(x)</span>
+<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a>}</span>
+<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a><span class="do">##回归分析</span></span>
+<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a>x_log_x<span class="ot">&lt;-</span>t<span class="sc">*</span><span class="fu">log</span>(t)</span>
+<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a>model<span class="ot">&lt;-</span><span class="fu">lm</span>(time <span class="sc">~</span> x_log_x)</span>
+<span id="cb8-59"><a href="#cb8-59" tabindex="-1"></a>y_pred<span class="ot">&lt;-</span><span class="fu">predict</span>(model)</span>
+<span id="cb8-60"><a href="#cb8-60" tabindex="-1"></a>polt_data<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">x_log_x=</span>x_log_x,<span class="at">y=</span>time,<span class="at">y_pred=</span>y_pred)</span>
+<span id="cb8-61"><a href="#cb8-61" tabindex="-1"></a><span class="fu">ggplot</span>(plot_data,<span class="fu">aes</span>(<span class="at">x=</span>x_log_x))<span class="sc">+</span></span>
+<span id="cb8-62"><a href="#cb8-62" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>y),<span class="at">color=</span><span class="st">&quot;blue&quot;</span>)<span class="sc">+</span>  </span>
+<span id="cb8-63"><a href="#cb8-63" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>y_pred),<span class="at">color=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb8-64"><a href="#cb8-64" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">&quot;Regression of y on x * log(x)&quot;</span>,</span>
+<span id="cb8-65"><a href="#cb8-65" tabindex="-1"></a>       <span class="at">x=</span><span class="st">&quot;x * log(x)&quot;</span>,</span>
+<span id="cb8-66"><a href="#cb8-66" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&quot;y&quot;</span>)<span class="sc">+</span></span>
+<span id="cb8-67"><a href="#cb8-67" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

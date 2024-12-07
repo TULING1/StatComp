@@ -1,0 +1,155 @@
+---
+title: "hw1"
+author: "Zukun li"
+date: "2024-09-16"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{hw1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Question 3.4
+
+The Rayleigh density [156, Ch. 18] is $$f(x)= \frac{x}{\sigma^{2}}e^{-\frac{x^{2}}{2\sigma^{2}}},x\ge0,\sigma^{2}>0$$ Develop an algorithm to generate random samples from a Rayleigh$(\sigma)$ distribution. Generate Rayleigh$(\sigma)$ samples for several choices of $\sigma>0$ and check that the mode of the generated samples is close to the theoretical mode
+
+$\sigma$ (check the histogram).
+
+## Answer 3.4
+
+Let$t=x^{2}$.
+
+So $f(t)=\frac{1}{2\sigma^{2}}e^{-\frac{t}{2\sigma^{2}}},F(t)=1-e^{-\frac{t}{2\sigma^{2}}}$.
+
+Actually,$t\sim Exp(\frac{1}{2\sigma^{2}})$.
+
+Then,let $u=F(t)=1-e^{-\frac{t}{2\sigma^{2}}}$.
+
+So,$u\sim U(0,1)$.
+
+In that way,$t=-2\sigma^{2}ln(1-u),x=\sqrt{t}$.Finally,we get: $$x=\sqrt{-2\sigma^{2}ln(1-u)}$$
+
+Let$\sigma$ takes three different values:1,2,3
+
+```{r}
+set.seed(122)
+n<- 1000
+t1<-1 #σ's value
+t2<-2
+t3<-3
+u<-runif(n,min=0,1-0.0001)
+x1<-sqrt(-2*(t1**2)*log(1-u))
+x2<-sqrt(-2*(t2**2)*log(1-u))
+x3<-sqrt(-2*(t3**2)*log(1-u))
+y<-seq(0,10,.01)
+par(mfrow=c(1,3))
+hist(x1,prob=TRUE,breaks=20,main ='σ=1')
+lines(y,y/(t1**2)*exp(-y**2/(2*t1**2)))
+hist(x2,prob=TRUE,breaks=20,main ='σ=2')
+lines(y,y/(t2**2)*exp(-y**2/(2*t2**2)))
+hist(x3,prob=TRUE,breaks=20,main ='σ=3')
+lines(y,y/(t3**2)*exp(-y**2/(2*t3**2)))
+```
+
+From the result,we could find the simulation is good.
+
+## Question 3.11
+
+Generate a random sample of size 1000 from a normal location mixture. The
+
+components of the mixture have $N(0,1)$ and $N(0,3)$ distributions with mixing
+
+probabilities $p_{1}$ and $p_{2}=1-p_{1}$. Graph the histogram of the sample
+
+with density superimposed, for $p_{1}=.75$. Repeat with different values for p1
+
+and observe whether the empirical distribution of the mixture appears to be
+
+bimodal. Make a conjecture about the values of p1 that produce bimodal
+
+mixtures.
+
+## Answer 3.11
+
+The CDF of this distribution is:$$F(x)=p_{1}\Psi(x)+p_{2}\Psi(x),p_{1}+p_{2}=1$$
+
+Let $p_{1}$ has the value:0.75,0.5,0.25
+
+```{r}
+set.seed(123)
+p11=0.75
+p21=0.5
+p31=0.25
+p12=1-p11
+p22=1-p21
+p32=1-p31
+n<-1e4
+x1<-rnorm(n,0,1)
+x2<-rnorm(n,3,1)
+r1<-sample(c(0,1),size = n,replace = TRUE,prob = c(p12,p11))
+r2<-sample(c(0,1),size = n,replace = TRUE,prob = c(p22,p21))
+r3<-sample(c(0,1),size = n,replace = TRUE,prob = c(p32,p31))
+z1<-r1*x1+(1-r1)*x2
+z2<-r2*x1+(1-r2)*x2
+z3<-r3*x1+(1-r3)*x2
+par(mfrow=c(1,3))
+hist(z1,breaks = 50,main ="p1=0.75")
+hist(z2,breaks = 50,main ="p1=0.5")
+hist(z3,breaks = 50,main ="p1=0.25")
+```
+
+We found that the positions of these two peaks are located on 0 and 3,
+
+respectively, which are the means of the original two distributions.What's
+
+more,the probability of a function is higher,the peak of this function is
+
+also higher.
+
+## Question 3.20
+
+A compound Poisson process is a stochastic process {$X(t),t≥ 0$}that can be
+
+represented as the random sum $X(t)= \sum_{i=1}^{N(t)}Yi, t\ge0,$where{$N(t),t≥ 0$}
+
+is a Poisson process and $Y1,Y2,...$are iid and independent of$N(t),t≥ 0$}.
+
+Write a program to simulate a compound Poisson($\lambda$)–Gamma
+
+process (Y has a Gamma distribution). Estimate the mean and the variance of
+
+X(10) for several choices of the parameters and compare with the theoretical
+
+values. Hint: Show that $E[X(t)] = λtE[Y_{1}]$ and $Var(X(t)) = λtE[Y_{1}^{2}]$.
+
+## Answer 3.20
+
+We know:$$P(N(t+s)-N(s)=n)=\frac{(\lambda t)^{n}}{n!}e^{-\lambda t}\ \ \ \ n=0,1,...$$ $$N(0)=0$$ And,$y_{i}$'s distribution is:$$ f(x)=\frac{\beta^{\alpha}x^{\alpha-1}}{\Gamma(x)}e^{-\beta x},x\ge0 $$ $$X(t)=\sum_{i=1}^{N(t)}Y_{i},t\ge0$$
+
+```{r}
+size<-1e4
+t=10
+lambda =3#the parameter of poisson process
+shape<-1
+scale<-1#the parameters of Gamma distribution
+n<-qpois(1-1e-9,lambda =lambda*t)#the largest number which the poisson process can get
+poip=function(z){
+  
+}
+xn<-rpois(size,lambda*t)
+xs<-c()
+for(i in 1:size){
+  yi=cumsum(c(rgamma(n,shape = shape,scale = scale)))
+  xs<-c(xs,yi[xn[i]])
+}
+print("Mean and Variance of the sample")
+print(mean(xs))
+print(var(xs))
+print("Theoretical mean and variance")
+print(lambda*t*shape*scale)
+print(lambda*t*(shape+1)*shape*scale**2)
+```
+
+We found that the mean and variance of the sample are very close to the
+
+theoretical values

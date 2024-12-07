@@ -1,0 +1,210 @@
+---
+title: "hw2"
+author: "Zukun li"
+date: "2024-10-04"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{hw2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Question 5.4
+
+Write a function to compute a Monte Carlo estimate of the Beta(3,3) cdf,and use the function to estimate $F(x)$ for $x=0.1,0.2,...,0.9$.Compare the estimates with the values returned by the $pbeta$ function in R.
+
+## Answer
+
+As $F(x)=\int_{-\infty}^{x}f(x)dx$ In this question,
+
+$$\begin{align}
+F(x) = &\int_{0}^{x}f(x;\alpha,\beta)dx\\
+=& \int_{0}^{x}beta(x;3,3)dx\\
+=&\int_{0}^{x}\frac{1}{B(3,3)}x^{3-1}(1-x)^{3-1}dxB\\
+\end{align}
+$$ We use Monte Carlo estimator: $$\begin{align}
+&F(x) = E_{x}(\frac{1}{x\times b(3,3)}t^{2}(1-t)^{2})dt\\
+&x\sim U(0,1)\\
+&Its estimate:\hat{\theta}=\frac{1}{m}\sum_{i=1}^{m}\frac{1}{x\times b(3,3)}t_{i}^{2}(1-t_{i})^{2}
+\end{align}
+$$
+
+```{r}
+n=10000
+Beta.cdf = function(x){
+  y=runif(n)
+  return(mean(dbeta(x*y,3,3))*x)
+}
+t<-seq(0.1,0.9,0.1)
+x1<-sapply(t,function(t) pbeta(t,3,3))
+x2<-sapply(t,function(t) Beta.cdf(t))
+round(rbind(x1,x2),4)
+```
+
+## Question 5.9
+
+The Rayleigh density is $$\\f(x)=\frac{x}{\sigma^{2}}e^{-x^{2}/(2\sigma^{2})},x\geq0,\sigma>0$$ Implement a function to generate samples from a Rayleigh($\sigma$)distribution, using antithetic variables.What is the percent reduction in variance of $\frac{X+X^{'}}{2}$compared with $\frac{X_{1}+X_{2}}{2}$for independent$X_{1},X_{2}$?
+
+## Answer
+
+Make $$\begin{align}
+&u=1-e^{-\frac{x^{2}}{2\sigma^{2}}}\\
+&u^{'}=1-u=e^{-\frac{x^{2}}{2\sigma^{2}}}\\
+we\ get\  &u\sim U(0,1)\\
+&x=\sigma\sqrt{-2ln(1-u)}\\
+and\ &x^{'}=\sigma\sqrt{-2ln(u)}
+\end{align}
+$$ So we get the function below which can generate samples from a Rayleigh($\sigma$)distribution,using antithetic variables:
+
+```{r}
+n=10000
+a = 2#value of σ
+pdf1.Rayleigh = function(x){
+  u1=runif(n/2)
+  return(a*(-2*log(1-u1))**0.5)
+}
+pdf2.Rayleigh = function(x){
+  u2=runif(n/2)
+  return(a*(-2*log(u2))**0.5)
+}
+```
+
+$$\begin{align}
+as\ E(X)&=\int_{0}^{\infty}\frac{x^{2}}{\sigma^{2}}e^{-\frac{x^{2}}{2\sigma^{2}}}dx\\
+&=\sqrt{\frac{\pi}{2}}\sigma\\
+and\ Var(x)&=E(X^{2})-(E(X))^{2}\\
+&=\int_{0}^{\infty}\frac{x^{3}}{\sigma^{2}}e^{-\frac{x^{2}}{2\sigma^{2}}}dx-\frac{\pi}{2}\sigma^{2}\\
+&=(2-\frac{\pi}{2})\sigma^{2}\\
+we\ can\ get\ \ Var(\frac{X_{1}+X_{2}}{2})&=(1-\frac{\pi}{4})\sigma^{2}\approx0.2146\sigma^{2}\\
+and \ Var(\frac{X+X^{'}}{2})&=(1-\frac{\pi}{4})\sigma^{2}+\frac{Cov(X,X^{'})}{2}\\
+because\ X&=\sigma\sqrt{-2ln(1-u)}\\
+and\ X^{'}&=\sigma\sqrt{-2ln(u)}\ (u\sim U(0,1))\\
+so\ Cov(X,X^{'})&=E(XX^{'})-E(X)E(X^{'})\\
+&=\int_{0}^{1}2\sigma^{2}\sqrt{ln(x)ln(1-x)}dx-\frac{\pi}{2}\sigma^{2}\\
+&\approx-0.4065\sigma^{2}\\
+then\ Var(\frac{X+X^{'}}{2})&\approx0.0114\sigma^{2}\\
+finally,we\ find\ the\ percent\\
+reduction\ in\ varience\ is\ about:\\
+&94.7\%
+\end{align}
+$$
+
+## Question 5.13
+
+Find two importance functions $f_{1}$and$f_{2}$that are supported on$(1,\infty)$and are 'closed' to $$g(x)=\frac{x^{2}}{\sqrt{2\pi}}e^{-x^{2}/2}\   \ x>1.
+$$ Which of your two importance functions should produce the smaller variance in estimating $$\int_{1}^{\infty}\frac{x^{2}}{\sqrt{2\pi}}e^{-x^{2}/2}dx
+$$ by importance sampling?Explain.
+
+## Answer
+
+```{r}
+g = function (x) {
+  x^2/sqrt(2*pi)*exp(-x^2/2)
+}
+x = seq(0,10,0.1)
+y = g(x)
+plot(x,y,type="l")
+
+```
+
+The probability distribution of the function is mainly concentrated in (1,4) Derive the function,we get:
+
+$$
+\frac{\partial g(x)}{\partial x}=\frac{1}{\sqrt{2\pi}}(2x-x^{3})e^{-\frac{x^{2}}{2}}=0\\
+we\ find\ when\ x=\sqrt{2}\\
+g(x)\ get\ the\ maximum\ value\sqrt{\frac{2}{\pi}}e^{-1}
+$$ so,we choose the importance function $f_{1}\sim N(1.5,1)$and $f_{2}\sim Weibull(2,2)$
+
+```{r}
+g = function (x) {
+  x^2/sqrt(2*pi)*exp(-x^2/2)
+}
+x = seq(1,10,0.1)
+y = g(x)
+plot(x,y,type="l",ylim=c(0,1))
+y_norm<-dnorm(x,mean = 1.5, sd= 1)
+y_weibull<-dweibull(x,shape = 2,scale = 2)
+lines(x,y_norm,col="red",ylim=c(0,1))
+lines(x,y_weibull,col="blue",ylim=c(0,1))
+sd_norm<-sd(y/y_norm)
+sd_weibull<-sd(y/y_weibull)
+rbind(sd_norm,sd_weibull)
+```
+
+so ,the weibull distribution is better
+
+## Question: Fast Sort
+
+For $n=10^{4},2*10^{4},4*10^{4},6*10^{4},8*10^{4}$,apply the fast sorting algorithm to randomly permuted numbers of 1,...,n. Calculate computation time averaged over 100 simulations,denoted by$a_{n}$. Regress $a_{n}\ on\ t_{n}:=nlog(n)$,and graphically show the results(scatter plot and regression line).
+
+## Answer
+
+```{r chunk-name, eval=FALSE, echo=TRUE,results='asis'}
+n=10000
+t<-c(n,2*n,4*n,6*n,8*n)
+
+##快速排序算法
+quicksort=function(x){
+    if(length(x)<=1)return(x)
+    x0<-x[1]
+    loc<-1
+    low<-1
+    n<-length(x)
+    high<-n
+    while(low!=high){
+        if(loc==low){
+            if(x[high]<x[loc]){
+                tmp<-x[high]
+                x[high]<-x[loc]
+                x[loc]<-tmp
+                low=low+1
+                loc=high
+            }else{
+                    high=high-1
+                }
+            }else{
+                if(x[low]>x[loc]){
+                    tmp<-x[low]
+                    x[low]<-x[loc]
+                    x[loc]<-tmp
+                    high=high-1
+                    loc=low
+                }else{
+                    low=low+1
+                }
+           }
+        }
+    L=c()
+    R=c()
+    if(low>1) L=x[1:(low-1)]
+    if(low<length(x)) R=x[(low+1):n]
+    return(c(quicksort(L),x[low],quicksort(R)))
+}
+
+time<-numeric(5)
+k<-0
+for(i in t){
+  k<-k+1
+  random_sample=sample(1:n,i,replace=TRUE)
+  x<-numeric(100)
+  for(j in 1:100){
+    start<-Sys.time()
+    y<-quicksort(random_sample)
+    end<-Sys.time()
+    x[j]<-(end-start)
+  }
+  time[k]<-mean(x)
+}
+##回归分析
+x_log_x<-t*log(t)
+model<-lm(time ~ x_log_x)
+y_pred<-predict(model)
+polt_data<-data.frame(x_log_x=x_log_x,y=time,y_pred=y_pred)
+ggplot(plot_data,aes(x=x_log_x))+
+  geom_point(aes(y=y),color="blue")+  
+  geom_line(aes(y=y_pred),color="red") + 
+  labs(title="Regression of y on x * log(x)",
+       x="x * log(x)",
+       y="y")+
+  theme_minimal()
+```

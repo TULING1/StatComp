@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Zukun Li" />
+
+<meta name="date" content="2024-11-07" />
+
+<title>hw7</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">hw7</h1>
+<h4 class="author">Zukun Li</h4>
+<h4 class="date">2024-11-07</h4>
+
+
+
+<div id="section" class="section level2">
+<h2>11.3</h2>
+<p>(a)Write a function to compute the <span class="math inline">\(k^{th}\)</span> term in <span class="math display">\[
+\sum_{k=0}^{\infty}\frac{(-1)^{k}}{k!2^{k}}\frac{||a||^{2k+2}}{(2k+1)(2k+2)}\frac{\Gamma(\frac{d+1}{2})\Gamma(k+\frac{3}{2})}{\Gamma(k+\frac{d}{2}+1)}
+\]</span> where d ≥ 1 is an integer, a is a vector in <span class="math inline">\(R^{d}\)</span>,and ||.|| denotes the Euclidean
+norm. Perform the arithmetic so that the coefficients can be computed
+for (almost) arbitrarily large k and d. (This sum converges for all
+<span class="math inline">\(a\in R^{d}\)</span>. (b) Modify the function
+so that it computes and returns the sum. (c) Evaluate the sum when <span class="math inline">\(a=(1,2)^{T}\)</span>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>a<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>k_term <span class="ot">=</span> <span class="cf">function</span>(a,k){</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  d<span class="ot">&lt;-</span><span class="fu">length</span>(a)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="fu">return</span>((<span class="sc">-</span><span class="dv">1</span>)<span class="sc">^</span>k <span class="sc">*</span> <span class="fu">exp</span>((<span class="dv">2</span><span class="sc">*</span>k<span class="sc">+</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">log</span>(<span class="fu">norm</span>(a,<span class="at">type=</span><span class="st">&quot;2&quot;</span>))<span class="sc">-</span><span class="fu">lgamma</span>(k<span class="sc">+</span><span class="dv">1</span>)<span class="sc">-</span>k<span class="sc">*</span><span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">-</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>k<span class="sc">+</span><span class="dv">1</span>)<span class="sc">-</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>k<span class="sc">+</span><span class="dv">2</span>)<span class="sc">+</span><span class="fu">lgamma</span>((d<span class="sc">+</span><span class="dv">1</span>)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">+</span><span class="fu">lgamma</span>(k<span class="sc">+</span><span class="dv">3</span><span class="sc">/</span><span class="dv">2</span>)<span class="sc">-</span><span class="fu">lgamma</span>(k<span class="sc">+</span>d<span class="sc">/</span><span class="dv">2</span><span class="sc">+</span><span class="dv">1</span>)))</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>}</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>n<span class="ot">&lt;-</span><span class="dv">500</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>z<span class="ot">&lt;-</span><span class="fu">numeric</span>(n)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>thesum <span class="ot">=</span> <span class="cf">function</span>(a){</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>    z[i]<span class="ot">&lt;-</span><span class="fu">k_term</span>(a,i<span class="dv">-1</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  }</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">sum</span>(z))</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>}</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="fu">thesum</span>(a)</span></code></pre></div>
+<pre><code>## [1] 1.532164</code></pre>
+</div>
+<div id="section-1" class="section level2">
+<h2>11.5</h2>
+<p>Write a function to solve the equation <span class="math display">\[
+\frac{2\Gamma(\frac{k}{2})}{\sqrt{\pi(k-1)}\Gamma(\frac{k-1}{2})}\int_{0}^{c_{k-1}}(1+\frac{u^{2}}{k-1})^{-k/2}du
+\\=\frac{2\Gamma(\frac{k+1}{2})}{\sqrt{\pi
+k}\Gamma(\frac{k}{2})}\int_{0}^{c_{k}}(1+\frac{u^{2}}{k})^{-(k+1)/2}du\\
+for\ a,where\\
+c_{k}=\sqrt{\frac{a^{2}k}{k+1-a^{2}}}
+\]</span> Compare the solutions with the points A(k) in Exercise
+11.4.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">500</span>, <span class="dv">1000</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>, <span class="dv">100</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">24</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">23</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> m) {</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>       <span class="fu">return</span>(<span class="fu">exp</span>(<span class="fu">log</span>(<span class="dv">2</span>) <span class="sc">+</span> <span class="fu">lgamma</span>(x<span class="sc">/</span><span class="dv">2</span>) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span>(<span class="fu">log</span>(pi<span class="sc">*</span>(x<span class="dv">-1</span>))) <span class="sc">-</span> <span class="fu">lgamma</span>((x<span class="dv">-1</span>)<span class="sc">/</span><span class="dv">2</span>)))</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>}</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(a){</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>       <span class="fu">return</span>((<span class="fu">f</span>(k)<span class="sc">*</span><span class="fu">integrate</span>(<span class="cf">function</span>(x)(<span class="dv">1</span> <span class="sc">+</span> (x<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>(k<span class="dv">-1</span>))<span class="sc">^</span>(<span class="sc">-</span>k<span class="sc">/</span><span class="dv">2</span>),<span class="at">lower =</span> <span class="fu">sqrt</span>((a<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>(k<span class="dv">-1</span>)<span class="sc">/</span>(k<span class="sc">-</span>a<span class="sc">^</span><span class="dv">2</span>)), <span class="at">upper =</span> <span class="cn">Inf</span>)<span class="sc">$</span>value) <span class="sc">-</span> (<span class="fu">f</span>(k<span class="sc">+</span><span class="dv">1</span>)<span class="sc">*</span><span class="fu">integrate</span>(<span class="cf">function</span>(x)(<span class="dv">1</span> <span class="sc">+</span> (x<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>k)<span class="sc">^</span>(<span class="sc">-</span>(k<span class="sc">+</span><span class="dv">1</span>)<span class="sc">/</span><span class="dv">2</span>), <span class="at">lower =</span> <span class="fu">sqrt</span>((a<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>k<span class="sc">/</span>(k<span class="sc">+</span><span class="dv">1</span><span class="sc">-</span>a<span class="sc">^</span><span class="dv">2</span>)), <span class="at">upper =</span> <span class="cn">Inf</span>)<span class="sc">$</span>value))</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>}</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>A[k] <span class="ot">&lt;-</span> <span class="fu">uniroot</span>(g, <span class="at">lower =</span> <span class="fl">0.01</span>, <span class="at">upper =</span> <span class="dv">1</span><span class="sc">+</span><span class="fu">sqrt</span>(k)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">$</span>root</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>}</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> n) {</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>       <span class="fu">return</span>(<span class="fu">exp</span>(<span class="fu">log</span>(<span class="dv">2</span>) <span class="sc">+</span> <span class="fu">lgamma</span>(x<span class="sc">/</span><span class="dv">2</span>) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span>(<span class="fu">log</span>(pi<span class="sc">*</span>(x<span class="dv">-1</span>))) <span class="sc">-</span> <span class="fu">lgamma</span>((x<span class="dv">-1</span>)<span class="sc">/</span><span class="dv">2</span>)))</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>}</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(a){</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>       <span class="fu">return</span>((<span class="fu">f</span>(k)<span class="sc">*</span><span class="fu">integrate</span>(<span class="cf">function</span>(x)(<span class="dv">1</span> <span class="sc">+</span> (x<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>(k<span class="dv">-1</span>))<span class="sc">^</span>(<span class="sc">-</span>k<span class="sc">/</span><span class="dv">2</span>), <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span> <span class="fu">sqrt</span>((a<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>(k<span class="dv">-1</span>)<span class="sc">/</span>(k<span class="sc">-</span>a<span class="sc">^</span><span class="dv">2</span>)))<span class="sc">$</span>value) <span class="sc">-</span> (<span class="fu">f</span>(k<span class="sc">+</span><span class="dv">1</span>)<span class="sc">*</span><span class="fu">integrate</span>(<span class="cf">function</span>(x)(<span class="dv">1</span> <span class="sc">+</span> (x<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>k)<span class="sc">^</span>(<span class="sc">-</span>(k<span class="sc">+</span><span class="dv">1</span>)<span class="sc">/</span><span class="dv">2</span>), <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span> <span class="fu">sqrt</span>((a<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>k<span class="sc">/</span>(k<span class="sc">+</span><span class="dv">1</span><span class="sc">-</span>a<span class="sc">^</span><span class="dv">2</span>)))<span class="sc">$</span>value))</span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>}</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>B[k] <span class="ot">&lt;-</span> <span class="fu">uniroot</span>(h, <span class="at">lower =</span> <span class="fl">0.01</span>, <span class="at">upper =</span> <span class="dv">1</span><span class="sc">+</span><span class="fu">sqrt</span>(k)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">$</span>root</span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>}</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, A[m])</span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">c</span>(B[n], <span class="cn">NA</span>, <span class="cn">NA</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">500</span>, <span class="dv">1000</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(k, A, B)</span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(result)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">k</th>
+<th align="right">A</th>
+<th align="right">B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">NA</td>
+<td align="right">1.492103</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="right">1.533576</td>
+<td align="right">1.533576</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="right">1.562721</td>
+<td align="right">1.562721</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="right">1.584427</td>
+<td align="right">1.584427</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="right">1.601166</td>
+<td align="right">1.601166</td>
+</tr>
+<tr class="even">
+<td align="right">9</td>
+<td align="right">1.614524</td>
+<td align="right">1.614524</td>
+</tr>
+<tr class="odd">
+<td align="right">10</td>
+<td align="right">1.625385</td>
+<td align="right">1.625385</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="right">1.634415</td>
+<td align="right">1.634415</td>
+</tr>
+<tr class="odd">
+<td align="right">12</td>
+<td align="right">1.642027</td>
+<td align="right">1.642027</td>
+</tr>
+<tr class="even">
+<td align="right">13</td>
+<td align="right">1.648536</td>
+<td align="right">1.648536</td>
+</tr>
+<tr class="odd">
+<td align="right">14</td>
+<td align="right">1.654175</td>
+<td align="right">1.654175</td>
+</tr>
+<tr class="even">
+<td align="right">15</td>
+<td align="right">1.659097</td>
+<td align="right">1.659097</td>
+</tr>
+<tr class="odd">
+<td align="right">16</td>
+<td align="right">1.663408</td>
+<td align="right">1.663408</td>
+</tr>
+<tr class="even">
+<td align="right">17</td>
+<td align="right">1.667301</td>
+<td align="right">1.667301</td>
+</tr>
+<tr class="odd">
+<td align="right">18</td>
+<td align="right">1.670724</td>
+<td align="right">1.670724</td>
+</tr>
+<tr class="even">
+<td align="right">19</td>
+<td align="right">1.673819</td>
+<td align="right">1.673819</td>
+</tr>
+<tr class="odd">
+<td align="right">20</td>
+<td align="right">1.676589</td>
+<td align="right">1.676589</td>
+</tr>
+<tr class="even">
+<td align="right">21</td>
+<td align="right">1.679154</td>
+<td align="right">1.679154</td>
+</tr>
+<tr class="odd">
+<td align="right">22</td>
+<td align="right">1.681470</td>
+<td align="right">1.681470</td>
+</tr>
+<tr class="even">
+<td align="right">23</td>
+<td align="right">1.683610</td>
+<td align="right">1.683610</td>
+</tr>
+<tr class="odd">
+<td align="right">24</td>
+<td align="right">1.685548</td>
+<td align="right">1.685548</td>
+</tr>
+<tr class="even">
+<td align="right">25</td>
+<td align="right">1.687347</td>
+<td align="right">1.687347</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">1.720610</td>
+<td align="right">1.720610</td>
+</tr>
+<tr class="even">
+<td align="right">500</td>
+<td align="right">1.729738</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1000</td>
+<td align="right">1.730924</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+<p>We can find that when K is the same,A(k)=B(k)</p>
+<p>Suppose T1,…,Tn are i.i.d. samples drawn from the exponential
+distribution with expectation λ. Those values greater than τ are not
+observed due to right censorship, so that the observed values are Yi =
+TiI(Ti ≤ τ) + τI(Ti &gt; τ), i = 1,…,n. Suppose τ = 1 and the observed
+Yi values are as follows: 0.54,
+0.48,0.33,0.43,1.00,1.00,0.91,1.00,0.21,0.85 Use the E-M algorithm to
+estimate λ, compare your result with the observed data MLE (note: Yi
+follows a mixture distribution)</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.54</span>, <span class="fl">0.48</span>, <span class="fl">0.33</span>, <span class="fl">0.43</span>, <span class="fl">1.00</span>, <span class="fl">1.00</span>, <span class="fl">0.91</span>, <span class="fl">1.00</span>, <span class="fl">0.21</span>, <span class="fl">0.85</span>) </span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>tau <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>censored <span class="ot">&lt;-</span> Y <span class="sc">==</span> tau </span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(Y)  </span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>tolerance <span class="ot">&lt;-</span> <span class="fl">1e-6</span>  </span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>max_iter <span class="ot">&lt;-</span> <span class="dv">1000</span>  </span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="cf">for</span> (iter <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max_iter) {</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  Y_complete <span class="ot">&lt;-</span> Y</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  Y_complete[censored] <span class="ot">&lt;-</span> tau <span class="sc">+</span> <span class="dv">1</span> <span class="sc">/</span> lambda</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>  lambda_new <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="dv">1</span><span class="sc">/</span>Y_complete)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  </span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">abs</span>(lambda <span class="sc">-</span> lambda_new) <span class="sc">&lt;</span> tolerance) {</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;steps:&quot;</span>, iter, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>    <span class="cf">break</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  }</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>  lambda <span class="ot">&lt;-</span> lambda_new</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## steps: 6</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;lambda：&quot;</span>, lambda, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## lambda： 1.826704</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>lambda_mle_observed <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="dv">1</span><span class="sc">/</span>Y)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;MLE：&quot;</span>, lambda_mle_observed, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## MLE： 1.932835</code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

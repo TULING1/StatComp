@@ -1,0 +1,99 @@
+---
+title: "hw4"
+author: "Zukun li"
+date: "2024-10-19"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{hw4}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Problem 1 
+
+Of N = 1000 hypotheses, 950 are null and 50 are alternative.The p-value under any null hypothesis is uniformly distributed(use runif), and the p-value under any alternative hypothesis follows the beta distribution with parameter 0.1 and 1 (use rbeta). Obtain Bonferroni adjusted p-values and B-H adjusted p-values. Calculate FWER, FDR, and TPR under nominal level α =0.1 for each of the two adjustment methods based on m=10000 simulation replicates. You should output the 6 numbers (3 ) to a 3×2 table (column names: Bonferroni correction, B-H correction; row names: FWER, FDR, TPR). Comment the results.
+```{r}
+N<-1000
+n_null<-950
+n_alt<-50
+alpha<-0.1
+m<-1e4
+
+results<-matrix(0, nrow = 3, ncol = 2)
+rownames(results)<-c("FWER", "FDR", "TPR")
+colnames(results)<-c("Bonferroni correction", "B-H correction")
+
+for(i in 1:m){
+  p_null<-runif(n_null)
+  p_alt<-rbeta(n_alt,0.1,1)
+  p_value<-c(p_null,p_alt)
+  
+  bonf_p<-p.adjust(p_value,method = "bonferroni")
+  bh_p<-p.adjust(p_value,method="BH")
+  
+  reject_bonf<-bonf_p<alpha
+  true_positive_bonf<-sum(reject_bonf[(n_null+1):N])
+  false_positive_bonf<-sum(reject_bonf[1:n_null])
+  fwer_bonf<-ifelse(false_positive_bonf>0,1,0)
+  fdr_bonf<-ifelse(sum(reject_bonf)>0,false_positive_bonf/sum(reject_bonf),0)
+  tpr_bonf<-true_positive_bonf/n_alt
+  
+  reject_bh<-bh_p<alpha
+  true_positive_bh<-sum(reject_bh[(n_null+1):N])
+  false_positive_bh<-sum(reject_bh[1:n_null])
+  fwer_bh<-ifelse(false_positive_bh>0,1,0)
+  fdr_bh<-ifelse(sum(reject_bh)>0,false_positive_bh/sum(reject_bh),0)
+  tpr_bh<-true_positive_bh/n_alt
+  
+  results["FWER", "Bonferroni correction"]<-results["FWER", "Bonferroni correction"]+fwer_bonf
+  results["FDR", "Bonferroni correction"]<-results["FDR", "Bonferroni correction"]+fdr_bonf
+  results["TPR", "Bonferroni correction"]<-results["TPR", "Bonferroni correction"]+tpr_bonf
+  
+  results["FWER", "B-H correction"]<-results["FWER", "B-H correction"]+fwer_bh
+  results["FDR", "B-H correction"]<-results["FDR", "B-H correction"]+fdr_bh
+  results["TPR", "B-H correction"]<-results["TPR", "B-H correction"]+tpr_bh
+}
+result<-results/m
+print(round(result,4))
+```
+B-H will give a larger value of TPR when its FDR is larger,it is suitable for more relaxed multiple comparison scenarios.
+
+## 7.4
+Refer to the air-conditioning data set aircondit provided in the boot package. The 12 observations are the times in hours between failures of air conditioning equipment:
+3,5,7,18,43,85,91,98,100,130,230,487
+Assume that the times between failures follow an exponential model Exp(λ). Obtain the MLE of the hazard rate λ and use bootstrap to estimate the bias and standard error of the estimate.
+
+As the MLE of the hazard rate λ is $\frac{n}{\sum_{i=1}^{n}x_{i}}$
+```{r}
+library(boot)
+set.seed(111)
+hours<-c(3,5,7,18,43,85,91,98,100,130,230,487)
+n<-12
+B<-1000
+
+mle=function(value,indices){
+  return(length(value[indices])/sum(value[indices]))
+}
+lambda_hat<-mle(hours)
+lambda_b<-boot(data = hours,statistic = mle,R = B)
+
+round(c(bias=mean(lambda_b$t)-lambda_hat,standard_error=sd(lambda_b$t)),4)
+```
+
+
+
+## 7.5
+Refer to Exercise 7.4. Compute 95% bootstrap confidence intervals for the mean time between failures 1/λ by the standard normal, basic, percentile, and BCa methods. Compare the intervals and explain why they may differ.
+
+```{r}
+set.seed(111)
+
+mle2=function(value,indices){
+  return(sum(value[indices])/length(value[indices]))
+}
+lambda_b_back<-boot(data = hours,statistic = mle2,R = B)
+bootstrap_ci <- boot.ci(lambda_b_back,conf =0.95, type = c("norm","basic", "perc", "bca"))
+
+print(bootstrap_ci)
+```
+The differences between each method stem from different assumptions about the null hypothesis and sample distribution, resulting in slightly different confidence intervals.

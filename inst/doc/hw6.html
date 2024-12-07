@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Zukun Li" />
+
+<meta name="date" content="2024-11-01" />
+
+<title>hw6</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">hw6</h1>
+<h4 class="author">Zukun Li</h4>
+<h4 class="date">2024-11-01</h4>
+
+
+
+<div id="section" class="section level2">
+<h2>9.3</h2>
+<p>Use the Metropolis-Hastings sampler to generate random variables from
+a standard Cauchy distribution. Discard the first 1000 of the chain, and
+compare the deciles of the generated observations with the deciles of
+the standard Cauchy distribution (see qcauchyor qt with df=1). Recall
+that a Cauchy(θ,η) distribution has density function</p>
+<p><span class="math display">\[
+f(x)=\frac{1}{\theta\pi(1+[(x-\eta)/\theta]^{2})}
+\]</span></p>
+<p>The standard Cauchy has the Cauchy(θ =1,η= 0) density. (Note that the
+standard Cauchy density is equal to the Student t density with one
+degree of freedom.)</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">111</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>theta<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>eta<span class="ot">=</span><span class="dv">0</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>f<span class="ot">&lt;-</span><span class="cf">function</span>(x){</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="fu">stopifnot</span>(theta <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="fu">return</span>(<span class="dv">1</span><span class="sc">/</span>(theta<span class="sc">*</span>pi<span class="sc">*</span>(<span class="dv">1</span><span class="sc">+</span>((x<span class="sc">-</span>eta)<span class="sc">/</span>theta)<span class="sc">**</span><span class="dv">2</span>)))</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>}</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>m<span class="ot">&lt;-</span><span class="fl">1e4</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>k<span class="ot">&lt;-</span><span class="dv">0</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>u<span class="ot">&lt;-</span><span class="fu">runif</span>(m)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">numeric</span>(m)</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>x[<span class="dv">1</span>]<span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="dv">1</span>,<span class="at">mean =</span> <span class="dv">1</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>m){</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>  xt<span class="ot">&lt;-</span>x[i<span class="dv">-1</span>]</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  y<span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="dv">1</span>,<span class="at">mean =</span> xt)</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>  r<span class="ot">=</span><span class="fu">f</span>(y)<span class="sc">*</span><span class="fu">dnorm</span>(<span class="at">x=</span>xt,<span class="at">mean=</span>y)<span class="sc">/</span>(<span class="fu">f</span>(xt)<span class="sc">*</span><span class="fu">dnorm</span>(<span class="at">x=</span>y,<span class="at">mean =</span> xt))</span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>  <span class="cf">if</span>(u[i]<span class="sc">&lt;=</span>r){</span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>    x[i]<span class="ot">=</span>y</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>    k<span class="ot">=</span>k<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>    x[i]<span class="ot">=</span>xt</span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>  }</span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>}</span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>is <span class="ot">=</span> <span class="dv">5001</span><span class="sc">:</span><span class="dv">5500</span></span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="fu">plot</span>(is, x[is], <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>a<span class="ot">&lt;-</span><span class="fu">ppoints</span>(<span class="dv">100</span>)</span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>QR<span class="ot">&lt;-</span><span class="fu">tan</span>(pi<span class="sc">*</span>(a<span class="fl">-0.5</span>))</span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a>Q<span class="ot">&lt;-</span><span class="fu">quantile</span>(x, a)</span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a><span class="fu">qqplot</span>(QR, Q, <span class="at">main=</span><span class="st">&quot;&quot;</span>,</span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a>        <span class="at">xlab=</span><span class="st">&quot;Cauty Quantiles&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Sample Quantiles&quot;</span>)</span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">col=</span><span class="st">&#39;blue&#39;</span>,<span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">hist</span>(x, <span class="at">probability =</span> <span class="cn">TRUE</span>, <span class="at">breaks =</span> <span class="dv">100</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>plot.x <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="fl">0.01</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">lines</span>(plot.x, <span class="fu">f</span>(plot.x))</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="section-1" class="section level2">
+<h2>9.8</h2>
+<p>This example appears in [40]. Consider the bivariate density</p>
+<p><span class="math display">\[
+f(x,y) \propto \binom{n}{x}y^{x+a-1}(1-y)^{n-x+b-1},\ x=0,1,...,n,0\le
+y\le 1
+\]</span></p>
+<p>It can be shown (see e.g. [23]) that for fixed a,b,n, the conditional
+distributions are Binomial(n,y)andBeta(x+a,n−x+b). Use the Gibbs sampler
+to generate a chain with target joint density f(x,y).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>n<span class="ot">&lt;-</span><span class="dv">100</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>a<span class="ot">&lt;-</span><span class="dv">20</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>b<span class="ot">&lt;-</span><span class="dv">30</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>f<span class="ot">=</span><span class="cf">function</span>(x,y){</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">factorial</span>(n)<span class="sc">/</span>(<span class="fu">factorial</span>(x)<span class="sc">*</span><span class="fu">factorial</span>(n<span class="sc">-</span>x))<span class="sc">*</span>(y<span class="sc">**</span>(x<span class="sc">+</span>a<span class="dv">-1</span>))<span class="sc">*</span>((<span class="dv">1</span><span class="sc">-</span>y)<span class="sc">**</span>(n<span class="sc">-</span>x<span class="sc">+</span>b<span class="sc">+</span><span class="dv">1</span>)))</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>}</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>m<span class="ot">&lt;-</span><span class="dv">5000</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>X<span class="ot">=</span><span class="fu">matrix</span>(<span class="dv">0</span>,<span class="at">nrow =</span> m,<span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>m){</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  xt<span class="ot">=</span>X[i<span class="dv">-1</span>,]</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  xt[<span class="dv">1</span>]<span class="ot">=</span><span class="fu">rbinom</span>(<span class="dv">1</span>,n,xt[<span class="dv">2</span>])</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  xt[<span class="dv">2</span>]<span class="ot">=</span><span class="fu">rbeta</span>(<span class="dv">1</span>,xt[<span class="dv">1</span>]<span class="sc">+</span>a,n<span class="sc">-</span>xt[<span class="dv">1</span>]<span class="sc">+</span>b)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  X[i,]<span class="ot">=</span>xt</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>}</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>x<span class="ot">&lt;-</span>X[<span class="dv">1001</span><span class="sc">:</span>m,]</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;Means: &#39;</span>,<span class="fu">round</span>(<span class="fu">colMeans</span>(x),<span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## Means:  40.66 0.41</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;Standard errors: &#39;</span>,<span class="fu">round</span>(<span class="fu">apply</span>(x,<span class="dv">2</span>,sd),<span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## Standard errors:  8.42 0.07</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;Correlation coefficients: &#39;</span>, <span class="fu">round</span>(<span class="fu">cor</span>(x[,<span class="dv">1</span>],x[,<span class="dv">2</span>]),<span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## Correlation coefficients:  0.82</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">plot</span>(x[,<span class="dv">1</span>],<span class="at">type=</span><span class="st">&#39;l&#39;</span>,<span class="at">col=</span><span class="dv">1</span>,<span class="at">lwd=</span><span class="dv">2</span>,<span class="at">xlab=</span><span class="st">&#39;Index&#39;</span>,<span class="at">ylab=</span><span class="st">&#39;Random numbers&#39;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">lines</span>(x[,<span class="dv">2</span>],<span class="at">col=</span><span class="dv">2</span>,<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&#39;bottomright&#39;</span>,<span class="fu">c</span>(<span class="fu">expression</span>(X[<span class="dv">1</span>]),<span class="fu">expression</span>(X[<span class="dv">2</span>])),<span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,<span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAbFBMVEUAAAAAADoAAGYAOjoAOpAAZrY6AAA6ADo6AGY6Ojo6kNtmAABmADpmAGZmZmZmkJBmtrZmtv+QOgCQOmaQkGaQ2/+2ZgC2/7a2///bkDrbkJDb/7bb/9vb///fU2v/tmb/25D//7b//9v////76DGoAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAJpUlEQVR4nO2di3ajNhRFmWmStklfcRvPuG3qxPz/P9ZCvEE6V9LFCHz2Wp1iLIS0DUKIi1KUxEuxdgFyh4IAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQYBO0OfLc3kqiof3FUuTIZ2g48P7x9NjeXxcsTQZ0gr6fHktz8X1v6/f1yxPdgwEHa9yThQ0oHeKPX6+PLx/vvAUG9BvpIsvb5cD/QxRvswXmyFY0OXwrCFIIY+bEC7INNI33O/ahAvSub7vWNC1jbbEeAo/tdNJ21fEEaTCTQWl7IyC0NYRCa8n2cP7Me1atmdB5y9vJ9OTTjI03u+CjZJY0Gy6uH7QVVDivdiOBZl+kBGUdrXPUNB8uvgj6Jg0YrZjQXUbdCqSOtQyQXNrg1XOVdyuGn6hJsh2Fb+8SbdE2dnPexKkwZygpoBdQRcXVIB0iwm6HMDtyK4FVaeYt4k+FXUn6Vw4eksqgpw1H62ank+LCjpXzfPJ0wj1hoxODpEOQVUZRYLsBm2CTu5kmzBB483jB8w8l/nekJGrt7RjQU3tPR3FjRxBxVJHkB2ud1W9+q7pJIW2QXsQVFf67O0INaNqTonj9riS0xPUr9S4u9L+r6thESSoKJCg3m/kqeVMjdrhxMgRxVF2+xOUynjItXHiE1S0n2spzZZuQYNaFoO82lLMCiqKXnHC6h0myDyb/njy3JDsWVBzmnlOscrPj2+eZ0RAUNGpmQpqKmmXeynLTlCvvS2KYQ5jQf1NNQRdDnCcoxpttOEx4DK/R0GCB4cmSd0XAh1FgaBelR2Cho1a+7EQCZpu2ksRJUjy6NkcPSfxEdSTsgdBtnHx8/ny9Xsl0tlbGgiyZkIEFV3lWiVdzQaCuo9iQX3lMYKe7PbeftDZpnHGyOxYkE5k0EhQU6SmYq2g0bdFrKCiaAUNPMwJ6ue3dnRHnKB+TcYCppv4vu+E6wlSjQ/aoyBJIy3NblKFIEFjBUiQG1VBSeEvQkHz1d2IIB16XRRXfShop4KUTzGPIFFt/YKEzO83UlBNYqTi/gUlvswyLwj78KXKTJBG+Iu81JJUmQmKCqAa1CYfQY6skwQlvsyyY0HwiY6WoNWJFKQDBd2xIBj7c++Cjnovs6ytwE+koMQI8nsQpDeiuLYCP5GCNMek11bgJ1JQHYJHQS5BouEOYZTranUXESlIgjTKdW0FEpYQJI5RXK86YhYRJI5yvVdBPIIQ0ijXuxUkjXLdpyBBCJ40u10KEoTgeXIZ1mSXggLuxT6enEl3LEgQ3SEIN9+xIEl0R33xus8jSBSCZybxuldBwuGO45e3OxUkbaSvN6xbEvTxZC/O49fdF2mkm13+AATp+0k4gmy7+fE0qt0yjbTlcnAPrWV3BNmHEdP2Y6EBM2F2WQkyD9OnAQd7e3CYUqaPp9+nbcLOBYXJPM2MPcQIqjpCKnN3LC0oJG3VZk6bjainGsazyuwvSwsK4/jwTx3T8/lrKyr+Mu97LVya3ahy6wqq5oCufnzzstKwoOIalaKJBcTZ5STITCJubwAuf37jETThcqh+cHsTmXSKLdcGrSmo7dSezTtuaYJSrmKjmuQjaEiiIA2AoHlXJRapU7otCSqnCXIWpDx3R79iOQmaFDQooWT2F2F2uxQkmT9InJ1AUDmRZdc4milt1u0o7lKQYA4zeXbDaoUJmn87Kha9IVfBLHjy7PIRpDjkKphHMSA7n6Cy/qrxURajFX0xqYLUhlx1yFDQTYdc5VOVAkHt+rKsT7ey92//xEoWpDbkKnhXI2Cq0mUF/efDXezZegO6hPhdjZCJJjsN3ZXeLjdOPIK6L5sNhnvx+pkIUhpyFbyrETJV6YygenksqEky+reXKrGl7IZc5wqKmHQUPSQeQfXyrQW1Q66mDWlFxd9q+AiYqlQiqBwLGi7rCOqGXE+P10o2R0F0R9GPdKrSfAQNhlyvP3Hzw8acYgW8igVkV85Xut8kzy6MlstEQcMh196A0I07isMrc7tyZvnGgoZ8/tLeRy0k6HRVUP0irukHYHbD2ksEibIV0Y9fiRAkiJM2d7J25oEtCvr4qVfmmI7iw/u1nfdEj9WX+SqgWlsQWKki6Gh+/pRG+rk8m6rjOe2Nyg0Kistx0FE0B+HgQBzSdhSPj9GCJEXKU5CpvWnlPYLaE+vaXN2foKr2x2f/oH3Tla67Xwn7DSMLQWbuKfehob3ftbO9cUdxqeyWyzZB0N+af6FOiQwEneoeorN1Ud7v2tmGCjJPnM0TsXPhGshQ3u/a2QYKqgaDrj2hk/ZfqFNidUHVeOvl8LN7qnFpdpshVJDp3xzTTq9xpmrpVkk2TF4LSnysGlyGzQnSmEEopAwUpJOOgnJMNkyuFqMYVobtCFKGgpQypSCddPsTtCcoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQQF/Q2ffyfR1c06aZLsg5uTOJyM2FuiDzjNb5ZnA9vUibZrogx4TrODKJyM2JtiAbheYY3T7bAd02zXRBTv2scy6TiNzcaAuyQaDzEXrn4rl6CaZNM10I3JsRpJfbLOqCqlhk56vTVlCTZroQuDcTl6yX2yzaguyp72wAqlK3aaYLYfuqQlG0cnOwZUE2Zntjgm57ihkLGzvFQAOp3EibrDbWSINL7FntMm8tXPPb2GUedNLOeh1FE6xTqdhWR7F3BzBH3TC0aaYLcszLKa9qubngzSqAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBMhP0CTqQCsMIQ4KAlAQIEtBny9/vNjQFhPH8pcRZOYhfrZhY4LZ9xXJVJCZYd1Mq2ai6Yv6g/nzMyZiKu3vV4WSqaDnXvjhsV5RRV+dv3775aZnXKaCXqspe9qAPdsMVb6OyfOshZG1oFMrqJ6651X2twk0yVrQ6AgyXA6/6YT3SslaUB3wXK+oOD38e7jlRSxvQdXFq72K2db6VSuEXkjegob9IDPhdRUcfctmOj9BmUFBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQH+Bz05LocPobqlAAAAAElFTkSuQmCC" /><!-- --></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

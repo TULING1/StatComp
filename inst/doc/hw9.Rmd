@@ -1,0 +1,54 @@
+---
+title: "hw9"
+author: "Zukun Li"
+date: "2024-11-21"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{hw9}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This example appears in [40]. Consider the bivariate density
+$$
+f(x,y)\propto \left ( \begin{matrix}
+n \\
+x
+\end{matrix}
+\right )y^{x+a-1}(1-y)^{n-x+b-1},x=0,1,...,n,0\le y\le 1. 
+$$
+It can be shown (see e.g. [23]) that for fixed a,b,n, the conditional distributions are Binomial(n,y) and Beta(x+a,n−x+b). Use the Gibbs sampler to generate a chain with target joint density f(x,y).
+
+
+```{r}
+library(Rcpp)
+library(StatComp)
+# 参数设置
+n = 100
+a = 10
+
+# 运行R和Rcpp版本
+
+x_r = gibbsR(n, a)
+x_cpp = gibbsC(n, a)
+
+qqplot(x_r[,1], x_cpp[,1], main = "QQ Plot for X", 
+       xlab = "R Gibbs Samples", ylab = "Rcpp Gibbs Samples")
+abline(0, 1, col = "red")
+
+qqplot(x_r[,2], x_cpp[,2], main = "QQ Plot for Y", 
+       xlab = "R Gibbs Samples", ylab = "Rcpp Gibbs Samples")
+abline(0, 1, col = "red")
+
+library(microbenchmark)
+
+benchmark_results = microbenchmark(
+  R_version = gibbsR(n, a),
+  Rcpp_version = gibbsC(n, a),
+  times = 10
+)
+
+print(benchmark_results)
+
+```
+From the results, there is not much difference between the r version of the code and the rcpp version of the code, but the rcpp version of the code is significantly less time-consuming and more efficient.

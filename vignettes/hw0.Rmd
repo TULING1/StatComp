@@ -1,0 +1,55 @@
+---
+title: "hw0"
+author: "Zukun li"
+date: "2024-09-09"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{hw0}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## 1美国七十个城市的年降水量分布
+
+```{r}
+data(precip)
+hist(precip,
+     main = "美国城市年降水量",
+     xlab = "降水量",
+     ylab = "频数"
+     )
+
+```
+
+## 2美国年客运里程营收变化
+
+```{r}
+data(airmiles)
+plot(airmiles)
+```
+
+对数据进行一元回归分析，即假设年客运营收$Y_{i}$和年数$X_{i}$符合 $$Y_{i}=\beta_{0}+\beta_{1}X_{i}$$ 由最小二乘法得到$${\hat{\theta_{1}}}=\frac{{\sum_{i}}(X_{i}-{\overline{X}})(Y_{i}-{\overline{Y}})}{{\sum_{i}}(X_{i}-{\overline{X}})^2} $$ $${\hat{\theta_{0}}}={\overline{Y}}-{\hat{\theta_{1}}}{\overline{X}} $$ 将回归方程作出
+
+```{r}
+df<-data.frame(Year = as.numeric(time(airmiles)),Miles = as.numeric(airmiles))
+model <- lm(Miles~Year,data =df)
+plot(df$Year, 
+     df$Miles, 
+     main="Air Miles Over Time",
+     xlab="Year", 
+     ylab="Miles",
+     col="blue"
+     )
+abline(model, col="red")
+```
+
+## 3绘制指数分布图
+
+```{r}
+x<-rweibull(10000,shape=1,scale=0.06)
+hist(x,
+     xlab='频数',
+     ylab='取值',
+     density=10,
+     nclass=100)
+```

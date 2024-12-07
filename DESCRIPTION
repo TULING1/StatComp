@@ -1,0 +1,26 @@
+Package: StatComp
+Type: Package
+Title: Test
+Version: 0.1.0
+Data: 2024-12-07
+Author: Zukun Li
+Maintainer: Zukun Li <3529276037@qq.com>
+Description:  Several R and Rcpp function are included in this package for illustration. 
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+Suggests: knitr,
+    rmarkdown, 
+    DAAG,
+    Rcpp,
+    boot,
+    bootstrap,
+    fastmatch,
+    lpSolve,
+    microbenchmark
+VignetteBuilder: knitr
+Imports: stats
+LinkingTo: Rcpp
+RoxygenNote: 7.3.2
+URL: http://github.com/laterice/StatComp
+BugReports: http://github.com/TULING1/StatComp/issues

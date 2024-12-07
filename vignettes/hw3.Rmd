@@ -1,0 +1,95 @@
+---
+title: "hw3"
+author: "Zukun li"
+date: "2024-10-06"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{hw3}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Question 6.6
+
+Estimate the 0.025,0.05,0.95,and 0.975 quantiles of the skewness$\sqrt{b_{1}}$ under normality by a Monte Carlo experiment.Compute the standard error of the estimates from(2.14)using the normal approximation for the density(with exact variance formula).Compare the estimated quantiles with the quantiles of the large sample approximation $\sqrt{b_{1}}\sim N(0,6/n)$.
+
+## Answer
+
+```{r}
+n<-30
+n_sim<-10000
+skew_value<-numeric(n_sim)
+for(i in 1:n_sim){
+  sample_data<-rnorm(n)
+  skew_value[i]<-sum((sample_data-mean(sample_data))^3)*(n^0.5)/((sd(sample_data)*(n-1)^0.5)^3)
+}
+quantiles<-quantile(skew_value,probs=c(0.025,0.05,0.95,0.975))
+standard_error<-sqrt(6/n)
+cat("estimate quantiles of skewness: \n")
+print(quantiles)
+cat("standard error:\n")
+print(standard_error)
+theory_quantiles<-qnorm(c(0.025,0.05,0.95,0.975),mean=0,sd=(6/n)^0.5)
+cat("theoretical quantiles of large sample approximation:\n")
+print(theory_quantiles)
+```
+we can get that the estimated value is very close to the theoretical value.
+
+## Question 6.8
+
+Refer to Example 6.16. Repeat the simulation, but also compute the $F$ test of equal variance, at significance level $\hat{a}\dot{=}0.055$.Compare the power of the Count Five test and $F$ test for small,medium,and large sample sizes.(Recall that the $F$ test is not applicable for non-normal distributions.)
+
+## Answer
+
+```{r}
+count5test=function(x,y){
+  X<-x-mean(x)
+  Y<-y-mean(y)
+  outx<-sum(X>max(Y))+sum(X<min(Y))
+  outy<-sum(Y>max(X))+sum(Y<min(X))
+  return(as.integer(max(c(outx,outy))>5))
+}
+sigma1 <- 1
+sigma2 <- 1.5
+alpha<-0.055
+num<-c(5,20,100)
+m<-1000
+power_five<-power_F<-numeric(3)
+count_five_power<-F_test_power<-numeric(3)
+for(i in 1:3){
+  count_five_reject<-0
+  f_test_reject<-0
+  for(j in 1:m){
+    x<-rnorm(num[i], 0, sigma1)
+    y<-rnorm(num[i], 0, sigma2)
+    
+    count_five_reject<-count_five_reject+count5test(x,y)
+    f_test_reject<-f_test_reject+(var.test(x,y)$p.value<alpha)
+  }
+  count_five_power[i]<-count_five_reject/m
+  F_test_power[i]<-f_test_reject/m
+}
+rbind(count_five_power,F_test_power)
+```
+
+We find ,as the sample size increases, the efficiency of both types of detection gradually increases.
+
+## Question
+
+If we obtain the powers for two methods under a particular simulation setting with 10,000 experiments: say, 0.651 for one method and 0.676 for another method. We want to know if the powers are different at 0.05 level.
+
+1.What is the corresponding hypothesis test problem?
+
+2.What test should we use? Z-test, two-sample t-test, paired-t test or McNemar test? Why?
+
+3.Please provide the least necessary information for hypothesis testing.
+
+## Answer
+
+We can't say the powers are different at 0.05 level.
+
+The corresponding hypothesis test problem is :if the powers of two methods are different,which is "$H_{0}: power_{1}=power_{2}$ vs $H_{1}: power_{1} \neq power_{2}$".
+
+We should use paired-t test.Because there is only one sample for each of $power_{1}$ and $power_{2}$ in this question, so multiple experiments should be performed to generate a large of $power_{1}$ and $power_{2}$, thereby obtaining many differences of $power_{1}$ and $power_{2}$.
+
+We can find that the difference between $power_{1}$ and $power_{2}$ is diff, a lot of diff approximately obey the t distribution. The null hypothesis can be tested by applying paired-t test.

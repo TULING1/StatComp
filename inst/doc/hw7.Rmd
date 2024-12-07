@@ -1,0 +1,123 @@
+---
+title: "hw7"
+author: "Zukun Li"
+date: "2024-11-07"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{hw7}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## 11.3
+
+(a)Write a function to compute the $k^{th}$ term in $$
+\sum_{k=0}^{\infty}\frac{(-1)^{k}}{k!2^{k}}\frac{||a||^{2k+2}}{(2k+1)(2k+2)}\frac{\Gamma(\frac{d+1}{2})\Gamma(k+\frac{3}{2})}{\Gamma(k+\frac{d}{2}+1)}
+$$ where d ≥ 1 is an integer, a is a vector in $R^{d}$,and \|\|.\|\|
+denotes the Euclidean norm. Perform the arithmetic so that the
+coefficients can be computed for (almost) arbitrarily large k and d.
+(This sum converges for all $a\in R^{d}$. (b) Modify the function so
+that it computes and returns the sum. (c) Evaluate the sum when
+$a=(1,2)^{T}$.
+
+```{r}
+a<-c(1,2)
+k_term = function(a,k){
+  d<-length(a)
+  return((-1)^k * exp((2*k+2)*log(norm(a,type="2"))-lgamma(k+1)-k*log(2)-log(2*k+1)-log(2*k+2)+lgamma((d+1)/2)+lgamma(k+3/2)-lgamma(k+d/2+1)))
+}
+n<-500
+z<-numeric(n)
+thesum = function(a){
+  for (i in 1:n) {
+    z[i]<-k_term(a,i-1)
+  }
+  return(sum(z))
+}
+thesum(a)
+```
+
+## 11.5
+
+Write a function to solve the equation $$
+\frac{2\Gamma(\frac{k}{2})}{\sqrt{\pi(k-1)}\Gamma(\frac{k-1}{2})}\int_{0}^{c_{k-1}}(1+\frac{u^{2}}{k-1})^{-k/2}du
+\\=\frac{2\Gamma(\frac{k+1}{2})}{\sqrt{\pi k}\Gamma(\frac{k}{2})}\int_{0}^{c_{k}}(1+\frac{u^{2}}{k})^{-(k+1)/2}du\\
+for\ a,where\\
+c_{k}=\sqrt{\frac{a^{2}k}{k+1-a^{2}}}
+$$ Compare the solutions with the points A(k) in Exercise 11.4.
+
+```{r}
+m <- c(5:25, 100, 500, 1000)
+n <- c(4:25, 100)
+A <- numeric(24)
+B <- numeric(23)
+
+for (k in m) {
+f <- function(x){
+       return(exp(log(2) + lgamma(x/2) - (1/2)*(log(pi*(x-1))) - lgamma((x-1)/2)))
+}
+
+g <- function(a){
+       return((f(k)*integrate(function(x)(1 + (x^2)/(k-1))^(-k/2),lower = sqrt((a^2)*(k-1)/(k-a^2)), upper = Inf)$value) - (f(k+1)*integrate(function(x)(1 + (x^2)/k)^(-(k+1)/2), lower = sqrt((a^2)*k/(k+1-a^2)), upper = Inf)$value))
+}
+A[k] <- uniroot(g, lower = 0.01, upper = 1+sqrt(k)/2)$root
+}
+
+for (k in n) {
+f <- function(x){
+       return(exp(log(2) + lgamma(x/2) - (1/2)*(log(pi*(x-1))) - lgamma((x-1)/2)))
+}
+h <- function(a){
+       return((f(k)*integrate(function(x)(1 + (x^2)/(k-1))^(-k/2), lower = 0, upper = sqrt((a^2)*(k-1)/(k-a^2)))$value) - (f(k+1)*integrate(function(x)(1 + (x^2)/k)^(-(k+1)/2), lower = 0, upper = sqrt((a^2)*k/(k+1-a^2)))$value))
+}
+B[k] <- uniroot(h, lower = 0.01, upper = 1+sqrt(k)/2)$root
+}
+
+A <- c(NA, A[m])
+B <- c(B[n], NA, NA)
+k <- c(4:25, 100, 500, 1000)
+result <- data.frame(k, A, B)
+knitr::kable(result)
+```
+
+We can find that when K is the same,A(k)=B(k)
+
+Suppose T1,...,Tn are i.i.d. samples drawn from the exponential
+distribution with expectation λ. Those values greater than τ are not
+observed due to right censorship, so that the observed values are Yi =
+TiI(Ti ≤ τ) + τI(Ti \> τ), i = 1,...,n. Suppose τ = 1 and the observed
+Yi values are as follows: 0.54,
+0.48,0.33,0.43,1.00,1.00,0.91,1.00,0.21,0.85 Use the E-M algorithm to
+estimate λ, compare your result with the observed data MLE (note: Yi
+follows a mixture distribution)
+
+```{r}
+Y <- c(0.54, 0.48, 0.33, 0.43, 1.00, 1.00, 0.91, 1.00, 0.21, 0.85) 
+tau <- 1
+censored <- Y == tau 
+n <- length(Y)  
+
+lambda <- 1 
+
+tolerance <- 1e-6  
+max_iter <- 1000  
+for (iter in 1:max_iter) {
+  Y_complete <- Y
+  Y_complete[censored] <- tau + 1 / lambda
+  lambda_new <- mean(1/Y_complete)
+  
+  if (abs(lambda - lambda_new) < tolerance) {
+    cat("steps:", iter, "\n")
+    break
+  }
+
+  lambda <- lambda_new
+}
+
+
+cat("lambda：", lambda, "\n")
+
+lambda_mle_observed <- mean(1/Y)
+cat("MLE：", lambda_mle_observed, "\n")
+
+```
